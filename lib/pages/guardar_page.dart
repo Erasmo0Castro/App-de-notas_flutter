@@ -11,6 +11,22 @@ class GuardarPage extends StatelessWidget {
       title: Text("Guardar"),
       ),
     body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+               Color.fromARGB(255, 253, 254, 255),
+               Color.fromARGB(255, 240, 248, 255),
+               Color.fromARGB(255, 221, 229, 238),
+              Color.fromARGB(255, 226, 230, 247),
+                Color.fromARGB(255, 127, 135, 218), 
+                 Color.fromARGB(255, 113, 123, 235),  // Color azul
+              Color(0xFF1976D2), // Color azul más oscuro
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          
+      ),
       child: _FormGuardar(),
       ),
     );
@@ -18,32 +34,41 @@ class GuardarPage extends StatelessWidget {
 }
 
 class _FormGuardar extends StatelessWidget{
-  
+
+final _formKey = GlobalKey<FormState>();
+final titleController = TextEditingController();
+final contentController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Form(child: Column(children: <Widget> [
-        TextFormField(
-          validator: (value){
-            if(value!.isEmpty){
-              return "Tiene que escribir algo";
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            labelText: "Titulo de la nota",
-            border: OutlineInputBorder()
-          ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: titleController,
+              validator: (value){
+                if(value!.isEmpty){
+                  return "Tiene que escribir algo";
+                }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: "Titulo de la nota",
+                  border: OutlineInputBorder()
+                ),
         ),
         SizedBox(height: 25,),
         
         TextFormField(
+          controller: contentController,
           maxLines: 8,
           maxLength: 500,
           validator: (value){
-            if(value!.isEmpty){
+            if(value == null || value.isEmpty){
               return "Tiene que escribir algo";
             }
             return null;
@@ -55,14 +80,17 @@ class _FormGuardar extends StatelessWidget{
           ),
         ),
 
-        ElevatedButton(child: Text("Guardar"), onPressed: (){
-          //print("guardar"),
-      },)
-    ],
-      
-      
-      
-      ),),
+        ElevatedButton(
+          child: Text("Guardar"), 
+          onPressed: (){
+            if(_formKey.currentState?.validate() ?? false){
+              print("Valido: " +titleController.text );
+              }
+            },
+          ),
+        ],
+      ),
+    ),
     );
     
   }
